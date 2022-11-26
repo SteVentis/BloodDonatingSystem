@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.ServiceInterfaces
+namespace Contracts.HospitalDtos
 {
-    public interface IServiceManager
+    public class HospitalReadDto
     {
     }
 }
