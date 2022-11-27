@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repositories
 {
-    public class HospitalRepository : IHospitalRepository
+    internal sealed class HospitalRepository : IHospitalRepository
     {
         private readonly DapperContext _dbContext;
         public HospitalRepository(DapperContext dbContext)
@@ -27,6 +27,18 @@ namespace Persistence.Repositories
                 var hospitals = connection.Query<Hospital>(query);
 
                 return hospitals.ToList();
+            }
+        }
+
+        public Hospital GetHospitalById(int id)
+        {
+            string query = "SELECT * FROM Hospitals WHERE Id = @Id";
+
+            using(var connection = _dbContext.CreateConnection())
+            {
+                var hospital = connection.QuerySingleOrDefault<Hospital>(query, new { id });
+
+                return hospital;
             }
         }
     }

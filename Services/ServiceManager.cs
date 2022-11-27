@@ -11,19 +11,18 @@ namespace Services
 {
     public class ServiceManager : IServiceManager
     {
-        private readonly Lazy<IHospitalService> _lazyHospitalService;
-        private readonly Lazy<IBloodDonorService> _lazyBloodDonorService;
-        private readonly Lazy<IPatientService> _lazyPatientService;
-        private readonly Lazy<IBloodDonationCenterService> _lazyBloodDonationCenterService;
+        private readonly IHospitalService _hospitalService;
+        
 
         public ServiceManager(IRepositoryManager repositoryManager)
         {
-            _lazyHospitalService = new Lazy<IHospitalService>(() => new HospitalService(repositoryManager));
+            _hospitalService = new HospitalService(repositoryManager);
+            
         }
 
         public IBloodDonorService BloodDonors => throw new NotImplementedException();
 
-        public IHospitalService Hospitals => _lazyHospitalService.Value;
+        public IHospitalService Hospitals => _hospitalService;
 
         public IPatientService Patients => throw new NotImplementedException();
 

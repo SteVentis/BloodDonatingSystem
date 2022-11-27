@@ -10,5 +10,6 @@ namespace Domain.RepositoryInterfaces
     public interface IHospitalRepository
     {
         IEnumerable<Hospital> GetAllHospitals();
+        Hospital GetHospitalById(int id);
     }
 }

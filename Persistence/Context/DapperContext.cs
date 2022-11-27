@@ -17,7 +17,7 @@ namespace Persistence.Context
         public DapperContext(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration.GetConnectionString("");
+            _connectionString = _configuration.GetConnectionString("Connection");
         }
 
         public IDbConnection CreateConnection() => new SqlConnection(_connectionString);

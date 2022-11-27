@@ -10,5 +10,7 @@ namespace Services.Abstractions.ServiceInterfaces
     public interface IHospitalService
     {
         IEnumerable<HospitalReadDto> GetAllHospitals();
+
+        HospitalReadDto GetHospitalById(int id);
     }
 }

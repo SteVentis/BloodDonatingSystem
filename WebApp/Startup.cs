@@ -1,12 +1,19 @@
+using Domain.RepositoryInterfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Persistence.Context;
+using Persistence.Repositories;
+using Presentation;
+using Services;
+using Services.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,10 +35,14 @@ namespace WebApp
         public void ConfigureServices(IServiceCollection services)
         {
 
+            var assembly = typeof(Presentation.Controllers.HospitalController).Assembly;
+            
+            services.AddControllers()
+                .AddApplicationPart(assembly);
 
-            services.AddControllers();
-                
-       
+            services.AddSingleton<DapperContext>();
+            services.AddScoped<IServiceManager, ServiceManager>();
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
 
             services.AddSwaggerGen(c =>
             {
