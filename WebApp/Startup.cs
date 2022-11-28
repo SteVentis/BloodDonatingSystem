@@ -1,3 +1,5 @@
+using Domain.DomainExceptions.Contracts;
+using Domain.DomainExceptions.LoggerService;
 using Domain.RepositoryInterfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using NLog;
 using Persistence.Context;
 using Persistence.Repositories;
 using Presentation;
@@ -16,9 +19,11 @@ using Services;
 using Services.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using WebApp.Extensions;
 
 namespace WebApp
 {
@@ -27,19 +32,19 @@ namespace WebApp
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
         }
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            var assembly = typeof(Presentation.Controllers.HospitalController).Assembly;
-            
+            var assembly = Assembly.Load("Presentation");
+ 
             services.AddControllers()
                 .AddApplicationPart(assembly);
 
+            services.AddSingleton<ILoggerManager, LoggerManager>();
             services.AddSingleton<DapperContext>();
             services.AddScoped<IServiceManager, ServiceManager>();
             services.AddScoped<IRepositoryManager, RepositoryManager>();
@@ -52,8 +57,7 @@ namespace WebApp
             
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerManager logger)
         {
             if (env.IsDevelopment())
             {
@@ -61,6 +65,10 @@ namespace WebApp
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApp v1"));
             }
+
+            app.ConfigureExceptionHandler(logger);
+
+            app.ConfigureCustomExceptionMiddleware();
 
             app.UseHttpsRedirection();
 

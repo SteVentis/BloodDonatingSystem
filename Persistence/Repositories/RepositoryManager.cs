@@ -1,4 +1,6 @@
-﻿using Domain.RepositoryInterfaces;
+﻿using Domain.DomainExceptions.Contracts;
+using Domain.DomainExceptions.LoggerService;
+using Domain.RepositoryInterfaces;
 using Persistence.Context;
 using System;
 using System.Collections.Generic;
@@ -17,10 +19,12 @@ namespace Persistence.Repositories
         public IBloodDonationCenterRepository BloodDonationCenters { get; }
 
         public IBloodDonorRepository BloodDonors { get; }
+        public ILoggerManager Logger { get; }
 
-        public RepositoryManager(DapperContext dbContext)
+        public RepositoryManager(DapperContext dbContext,ILoggerManager logger)
         {
-            Hospitals = new HospitalRepository(dbContext);
+            Logger = logger;
+            Hospitals = new HospitalRepository(dbContext,logger);
         }
     }
 }

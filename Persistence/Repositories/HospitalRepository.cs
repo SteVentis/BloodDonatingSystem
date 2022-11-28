@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Domain.DomainExceptions.Contracts;
 using Domain.Entities.Models;
 using Domain.RepositoryInterfaces;
 using Persistence.Context;
@@ -13,9 +14,11 @@ namespace Persistence.Repositories
     internal sealed class HospitalRepository : IHospitalRepository
     {
         private readonly DapperContext _dbContext;
-        public HospitalRepository(DapperContext dbContext)
+        private readonly ILoggerManager _logger;
+        public HospitalRepository(DapperContext dbContext, ILoggerManager logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public IEnumerable<Hospital> GetAllHospitals()
@@ -24,10 +27,14 @@ namespace Persistence.Repositories
 
             using (var connection = _dbContext.CreateConnection())
             {
-                var hospitals = connection.Query<Hospital>(query);
+                _logger.LogInfo("Fetching all the Hospitals from database");
+
+                var hospitals = connection.Query<Hospital>(query);              
 
                 return hospitals.ToList();
+                
             }
+           
         }
 
         public Hospital GetHospitalById(int id)

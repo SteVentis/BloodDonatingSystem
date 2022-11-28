@@ -22,7 +22,10 @@ namespace Presentation.Controllers
         [HttpGet]
         public IActionResult GetAllHospitals()
         {
-            return Ok(_serviceManager.Hospitals.GetAllHospitals());
+
+            var hospitals = _serviceManager.Hospitals.GetAllHospitals();
+
+            return Ok(hospitals);
         }
 
         [HttpGet("{id}")]
