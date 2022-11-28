@@ -43,6 +43,8 @@ namespace Persistence.Repositories
 
             using(var connection = _dbContext.CreateConnection())
             {
+                _logger.LogInfo($"Fetch Hospital with Id={id}");
+
                 var hospital = connection.QuerySingleOrDefault<Hospital>(query, new { id });
 
                 return hospital;

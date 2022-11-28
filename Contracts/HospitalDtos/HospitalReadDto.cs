@@ -14,4 +14,6 @@ namespace Contracts.HospitalDtos
         public string Phone { get; set; }
         public bool IsBloodDonationCenter { get; set; }
     }
+
+    
 }

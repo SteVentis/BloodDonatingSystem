@@ -23,7 +23,6 @@ namespace Services
             var hospitalsFromRepo = _repositoryManager.Hospitals.GetAllHospitals();
 
             var mappedHospitals = new List<HospitalReadDto>();
-
             
             foreach (var hospital in hospitalsFromRepo)
             {
@@ -44,7 +43,7 @@ namespace Services
 
         public HospitalReadDto GetHospitalById(int id)
         {
-            var hospital = (_repositoryManager.Hospitals.GetHospitalById(id));
+            var hospital = _repositoryManager.Hospitals.GetHospitalById(id);
 
             var dto = new HospitalReadDto
             {

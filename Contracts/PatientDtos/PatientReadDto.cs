@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities.Models
+namespace Contracts.PatientDtos
 {
-    public class Patient
+    public class PatientReadDto
     {
-        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
@@ -17,9 +16,6 @@ namespace Domain.Entities.Models
         public int UnitsOfBloodNeeded { get; set; }
         public DateTime ExpiresAt { get; set; }
         public bool IsEmergency { get; set; }
-
-        //Navigation Properties
-        public int Hospital_Id { get; set; }
-        public Hospital Hospital { get; set; }
+        public int HospitalId { get; set; }
     }
 }

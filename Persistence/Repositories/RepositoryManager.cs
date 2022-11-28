@@ -25,6 +25,7 @@ namespace Persistence.Repositories
         {
             Logger = logger;
             Hospitals = new HospitalRepository(dbContext,logger);
+            Patients = new PatientRepository(dbContext,logger);
         }
     }
 }
