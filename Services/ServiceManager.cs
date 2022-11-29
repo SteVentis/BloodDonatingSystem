@@ -11,20 +11,18 @@ namespace Services
 {
     public class ServiceManager : IServiceManager
     {
-        private readonly IHospitalService _hospitalService;
-        
+        public IHospitalService Hospitals { get; }
+
+        public IPatientService Patients { get; }
 
         public ServiceManager(IRepositoryManager repositoryManager)
         {
-            _hospitalService = new HospitalService(repositoryManager);
+            Hospitals = new HospitalService(repositoryManager);
+            Patients = new PatientService(repositoryManager);
             
         }
 
         public IBloodDonorService BloodDonors => throw new NotImplementedException();
-
-        public IHospitalService Hospitals => _hospitalService;
-
-        public IPatientService Patients => throw new NotImplementedException();
 
         public IBloodDonationCenterService BloodDonationCenters => throw new NotImplementedException();
     }

@@ -60,7 +60,7 @@ namespace Persistence.Repositories
             parameters.Add("UnitsOfBloodNeeded", patient.UnitsOfBloodNeeded, DbType.Int32);
             parameters.Add("ExpiresAt", patient.ExpiresAt, DbType.Date);
             parameters.Add("IsEmergency", patient.IsEmergency, DbType.Boolean);
-            parameters.Add("Hospital_Id", patient.Hospital_Id, DbType.Int32);
+            parameters.Add("Hospital_Id", hospitalId, DbType.Int32);
 
             using(var connection = _dbContext.CreateConnection())
             {
