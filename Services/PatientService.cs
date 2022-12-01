@@ -1,4 +1,5 @@
-﻿using Contracts.PatientDtos;
+﻿using AutoMapper;
+using Contracts.PatientDtos;
 using Domain.RepositoryInterfaces;
 using Services.Abstractions.ServiceInterfaces;
 using System;
@@ -13,8 +14,11 @@ namespace Services
     {
         private readonly IRepositoryManager _repositoryManager;
 
-        public PatientService(IRepositoryManager repositoryManager)
+        private readonly IMapper _mapper;
+
+        public PatientService(IRepositoryManager repositoryManager, IMapper mapper)
         {
+            _mapper = mapper;
             _repositoryManager = repositoryManager;
         }
 
@@ -22,25 +26,9 @@ namespace Services
         {
             var patients = _repositoryManager.Patients.GetAllPatients();
 
-            var patientsDto = new List<PatientReadDto>();
+            var patientsDto = _mapper.Map<IEnumerable<PatientReadDto>>(patients);
 
-            foreach(var patient in patients)
-            {
-                var dto = new PatientReadDto()
-                {
-                    Id = patient.Id,
-                    FirstName = patient.FirstName,
-                    LastName = patient.LastName,
-                    DateOfBirth = patient.DateOfBirth,
-                    BloodType = patient.BloodType,
-                    UnitsOfBloodNeeded = patient.UnitsOfBloodNeeded,
-                    IsEmergency = patient.IsEmergency,
-                    ExpiresAt = patient.ExpiresAt,
-                    HospitalId = patient.Hospital_Id
-                };
-                patientsDto.Add(dto);
-            }
-
+            
             return patientsDto;
         }
 
@@ -48,20 +36,9 @@ namespace Services
         {
             var patient = _repositoryManager.Patients.GetPatientById(id);
 
-            var dto = new PatientReadDto()
-            {
-                Id = patient.Id,
-                FirstName = patient.FirstName,
-                LastName = patient.LastName,
-                DateOfBirth = patient.DateOfBirth,
-                BloodType = patient.BloodType,
-                UnitsOfBloodNeeded = patient.UnitsOfBloodNeeded,
-                IsEmergency = patient.IsEmergency,
-                ExpiresAt = patient.ExpiresAt,
-                HospitalId = patient.Hospital_Id
-            };
+            var patientDto = _mapper.Map<PatientReadDto>(patient);
 
-            return dto;
+            return patientDto; 
         }
 
         public void InsertPatient(int hospitalId,PatientCreateDto dto)
@@ -69,9 +46,6 @@ namespace Services
             throw new NotImplementedException();
         }
 
-        public void InsertPatient(int hospitalId)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

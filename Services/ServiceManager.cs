@@ -1,4 +1,5 @@
-﻿using Domain.RepositoryInterfaces;
+﻿using AutoMapper;
+using Domain.RepositoryInterfaces;
 using Services.Abstractions;
 using Services.Abstractions.ServiceInterfaces;
 using System;
@@ -12,18 +13,22 @@ namespace Services
     public class ServiceManager : IServiceManager
     {
         public IHospitalService Hospitals { get; }
-
         public IPatientService Patients { get; }
+        public IBloodDonationCenterService BloodDonationCenters { get; }
 
-        public ServiceManager(IRepositoryManager repositoryManager)
+        private readonly IMapper _mapper;
+
+        public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper)
         {
-            Hospitals = new HospitalService(repositoryManager);
-            Patients = new PatientService(repositoryManager);
+            _mapper = mapper;
+            Hospitals = new HospitalService(repositoryManager, mapper);
+            Patients = new PatientService(repositoryManager, mapper);
+            BloodDonationCenters = new BloodDonationCenterService(repositoryManager, mapper);
             
         }
 
         public IBloodDonorService BloodDonors => throw new NotImplementedException();
 
-        public IBloodDonationCenterService BloodDonationCenters => throw new NotImplementedException();
+        
     }
 }

@@ -7,15 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities.Models;
+using AutoMapper;
 
 namespace Services
 {
     internal sealed class HospitalService : IHospitalService
     {
         private readonly IRepositoryManager _repositoryManager;
-        public HospitalService(IRepositoryManager repositoryManager)
+        private readonly IMapper _mapper;
+        public HospitalService(IRepositoryManager repositoryManager, IMapper mapper)
         {
             _repositoryManager = repositoryManager;
+            _mapper = mapper;
         }
 
         public IEnumerable<HospitalReadDto> GetAllHospitals()

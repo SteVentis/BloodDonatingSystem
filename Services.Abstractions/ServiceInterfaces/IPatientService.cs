@@ -11,7 +11,7 @@ namespace Services.Abstractions.ServiceInterfaces
     {
         IEnumerable<PatientReadDto> GetAllPatients();
         PatientReadDto GetPatientById(int id);
-        void InsertPatient(int hospitalId);
+        void InsertPatient(int hospitalId, PatientCreateDto patientDto);
 
     }
 }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repositories
 {
-    public class PatientRepository : IPatientRepository
+    internal sealed class PatientRepository : IPatientRepository
     {
         private readonly ILoggerManager _logger;
         private readonly DapperContext _dbContext;
