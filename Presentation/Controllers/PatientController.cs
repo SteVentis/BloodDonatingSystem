@@ -26,5 +26,13 @@ namespace Presentation.Controllers
 
             return Ok(patients);
         }
+
+        [HttpGet("{id}")]
+        public IActionResult GetPatientById(int id)
+        {
+            var patient = _serviceManager.Patients.GetPatientById(id);
+
+            return Ok(patient);
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace Services
         public IHospitalService Hospitals { get; }
         public IPatientService Patients { get; }
         public IBloodDonationCenterService BloodDonationCenters { get; }
+        public IBloodDonorService BloodDonors { get; }
 
         private readonly IMapper _mapper;
 
@@ -24,10 +25,11 @@ namespace Services
             Hospitals = new HospitalService(repositoryManager, mapper);
             Patients = new PatientService(repositoryManager, mapper);
             BloodDonationCenters = new BloodDonationCenterService(repositoryManager, mapper);
+            BloodDonors = new BloodDonorService(repositoryManager, mapper);
             
         }
 
-        public IBloodDonorService BloodDonors => throw new NotImplementedException();
+        
 
         
     }

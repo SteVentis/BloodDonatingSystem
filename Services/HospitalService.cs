@@ -24,21 +24,7 @@ namespace Services
         public IEnumerable<HospitalReadDto> GetAllHospitals()
         {
             var hospitalsFromRepo = _repositoryManager.Hospitals.GetAllHospitals();
-
-            var mappedHospitals = new List<HospitalReadDto>();
-            
-            foreach (var hospital in hospitalsFromRepo)
-            {
-                var hospitalDto = new HospitalReadDto()
-                {
-                    Name = hospital.Name,
-                    Address = hospital.Address,
-                    Email = hospital.Email,
-                    Phone = hospital.Phone,
-                    IsBloodDonationCenter = hospital.IsBloodDonationCenter
-                };
-                mappedHospitals.Add(hospitalDto);
-            }
+            var mappedHospitals = _mapper.Map<IEnumerable<HospitalReadDto>>(hospitalsFromRepo);
 
             return mappedHospitals;
 
@@ -48,16 +34,9 @@ namespace Services
         {
             var hospital = _repositoryManager.Hospitals.GetHospitalById(id);
 
-            var dto = new HospitalReadDto
-            {
-                Name = hospital.Name,
-                Address = hospital.Address,
-                Phone = hospital.Phone,
-                Email = hospital.Email,
-                IsBloodDonationCenter = hospital.IsBloodDonationCenter
-            };
+            var hospitalDto = _mapper.Map<HospitalReadDto>(hospital);
 
-            return dto;
+            return hospitalDto;
         }
 
        

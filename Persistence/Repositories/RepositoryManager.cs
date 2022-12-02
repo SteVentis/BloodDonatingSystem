@@ -27,6 +27,7 @@ namespace Persistence.Repositories
             Hospitals = new HospitalRepository(dbContext,logger);
             Patients = new PatientRepository(dbContext,logger);
             BloodDonationCenters = new BloodDonationCenterRepository(dbContext,logger);
+            BloodDonors = new BloodDonorRepository(dbContext, logger);
         }
     }
 }

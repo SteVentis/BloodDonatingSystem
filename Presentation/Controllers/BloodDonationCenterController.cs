@@ -1,4 +1,4 @@
-﻿using Contracts.BloodDonatioCenterDtos;
+﻿using Contracts.BloodDonationCenterDtos;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Presentation.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class BloodDonationCenterController : ControllerBase
     {
         private readonly IServiceManager _serviceManager;
@@ -28,7 +28,7 @@ namespace Presentation.Controllers
             return Ok(bloodDonationCenters);
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public IActionResult GetBloodDonationCenterById(int id)
         {
             var blooddonationCenter = _serviceManager.BloodDonationCenters.GetBloodDonationCenterById(id);

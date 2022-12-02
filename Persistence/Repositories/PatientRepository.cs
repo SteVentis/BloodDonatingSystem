@@ -14,13 +14,15 @@ namespace Persistence.Repositories
 {
     internal sealed class PatientRepository : IPatientRepository
     {
-        private readonly ILoggerManager _logger;
         private readonly DapperContext _dbContext;
+        private readonly ILoggerManager _logger;
 
-        public PatientRepository(DapperContext dbContext, ILoggerManager logger)
+
+        public PatientRepository(DapperContext dbContext, ILoggerManager loggerManager)
         {
-            _logger = logger;
+            _logger = loggerManager;
             _dbContext = dbContext;
+
         }
 
         public IEnumerable<Patient> GetAllPatients()
@@ -29,6 +31,8 @@ namespace Persistence.Repositories
 
             using(var connection = _dbContext.CreateConnection())
             {
+                _logger.LogInfo("Fetching all the Patients from database");
+
                 var patients = connection.Query<Patient>(query);
 
                 return patients.ToList();
@@ -41,6 +45,8 @@ namespace Persistence.Repositories
 
             using(var connection = _dbContext.CreateConnection())
             {
+                _logger.LogInfo($"Fetch Patient with Id={id}");
+
                 var patient = connection.QuerySingleOrDefault<Patient>(query, new { id });
 
                 return patient;

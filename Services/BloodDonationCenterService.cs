@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Contracts.BloodDonatioCenterDtos;
+using Contracts.BloodDonationCenterDtos;
 using Domain.RepositoryInterfaces;
 using Services.Abstractions.ServiceInterfaces;
 using System;
@@ -22,12 +22,18 @@ namespace Services
 
         public IEnumerable<BloodDonationCenterReadDto> GetAllBloodDonationCenters()
         {
-            throw new NotImplementedException();
+            var bloodDonationCenters = _repositoryManager.BloodDonationCenters.GetAllBloodDonationCenters();
+            var mappedDonationCenters = _mapper.Map<IEnumerable<BloodDonationCenterReadDto>>(bloodDonationCenters);
+
+            return mappedDonationCenters;
         }
 
         public BloodDonationCenterReadDto GetBloodDonationCenterById(int id)
         {
-            throw new NotImplementedException();
+            var donationCenterFromRepo = _repositoryManager.BloodDonationCenters.GetBloodDonationCenterById(id);
+            var mappedDonationCenter = _mapper.Map<BloodDonationCenterReadDto>(donationCenterFromRepo);
+
+            return mappedDonationCenter;
         }
     }
 }

@@ -24,9 +24,12 @@ namespace Persistence.Repositories
 
         public IEnumerable<BloodDonationCenter> GetAllBloodDonationCenters()
         {
-            string query = "SELECT * FROM BloodDonationCenters";
+            string query = "SELECT * FROM BloodDonationCenter";
+
             using(var connection = _dbContext.CreateConnection())
             {
+                _logger.LogInfo("Fetching all the Blood Donation Centers from database");
+
                 var bloodCenters = connection.Query<BloodDonationCenter>(query);
 
                 return bloodCenters.ToList();
@@ -35,10 +38,12 @@ namespace Persistence.Repositories
 
         public BloodDonationCenter GetBloodDonationCenterById(int id)
         {
-            string query = "SELECT * FROM BloodDonationCenters WHERE Id = @id";
+            string query = "SELECT * FROM BloodDonationCenter WHERE Id = @id";
 
             using(var connection = _dbContext.CreateConnection())
             {
+                _logger.LogInfo($"Fetch Blood Donation Center with Id={id}");
+
                 var bloodCenter = connection.QuerySingleOrDefault<BloodDonationCenter>(query, new { id });
 
                 return bloodCenter;
