@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.IdentityModels
 {
-    public class IdentityUser
+    public class AuthenticatedResponse
     {
+        public string Token { get; set; }
+        public string RefreshToken { get; set; }
     }
 }

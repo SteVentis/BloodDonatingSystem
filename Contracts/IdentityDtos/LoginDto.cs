@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities.IdentityModels
+namespace Contracts.IdentityDtos
 {
-    public class UserRole
+    public class LoginDto
     {
+        public string UserName { get; set; }
+
     }
 }
