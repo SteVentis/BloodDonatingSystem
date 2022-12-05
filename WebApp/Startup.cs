@@ -50,13 +50,20 @@ namespace WebApp
             services.AddControllers()
                 .AddApplicationPart(assembly);
 
-            var connectionString = Configuration.GetConnectionString("IdentityConnection");
+            var connectionString = Configuration.GetConnectionString("Connection");
             services.AddSingleton<DapperContext>();
             
 
             services.AddSingleton<ILoggerManager, LoggerManager>();
             services.AddScoped<IServiceManager, ServiceManager>();
             services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+            services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connectionString));
+
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>();
+
+            
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

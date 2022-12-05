@@ -7,19 +7,17 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.IdentityModels
 {
-    public class RegisterModel
+    public class UserRegistrationModel
     {
-        [Required]
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress]
         public string Email { get; set; }
-
-        [Required]
+        [Required(ErrorMessage = "Password is required")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
-
-        [Required]
-        [Compare("Password")]
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        [Required]
-        public UserRoles UserRole { get; set; }
     }
 }
