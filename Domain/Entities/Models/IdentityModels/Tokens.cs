@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities.IdentityModels
+namespace Domain.Entities.Models.IdentityModels
 {
-    public class AuthenticatedResponse
+    public class Tokens
     {
+        public string User_Id { get; set; }
         public string Token { get; set; }
         public string RefreshToken { get; set; }
     }
