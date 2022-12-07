@@ -16,6 +16,7 @@ namespace Services
         public IPatientService Patients { get; }
         public IBloodDonationCenterService BloodDonationCenters { get; }
         public IBloodDonorService BloodDonors { get; }
+        public IUserService Users { get; }
 
         private readonly IMapper _mapper;
 
@@ -26,7 +27,7 @@ namespace Services
             Patients = new PatientService(repositoryManager, mapper);
             BloodDonationCenters = new BloodDonationCenterService(repositoryManager, mapper);
             BloodDonors = new BloodDonorService(repositoryManager, mapper);
-            
+            Users = new UserService(repositoryManager);
         }
 
         

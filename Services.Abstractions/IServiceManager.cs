@@ -16,5 +16,7 @@ namespace Services.Abstractions
         IPatientService Patients { get; }
 
         IBloodDonationCenterService BloodDonationCenters { get; }
+
+        IUserService Users { get; }
     }
 }

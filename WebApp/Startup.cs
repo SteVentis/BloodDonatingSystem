@@ -1,6 +1,5 @@
 using Domain.DomainExceptions.Contracts;
 using Domain.DomainExceptions.LoggerService;
-using Domain.Entities.IdentityModels;
 using Domain.RepositoryInterfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
