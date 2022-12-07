@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repositories
 {
-    internal sealed class UserRepository : IUserRepository
+    internal sealed class AuthRepository : IAuthRepository
     {
         private readonly DapperContext _dbContext;
         private readonly ILoggerManager _logger;
-        public UserRepository(DapperContext dbContext, ILoggerManager logger)
+        public AuthRepository(DapperContext dbContext, ILoggerManager logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -40,6 +40,18 @@ namespace Persistence.Repositories
             {
                 var userRegistration = connection.Execute(query, parameters);
             }
+        }
+        public User Login(string userName,string password)
+        {
+            var query = $"SELECT * FROM Users WHERE UserName=@userName AND PasswordHash=@password";
+
+            using(var connection = _dbContext.CreateConnection())
+            {
+                var user = connection.QueryFirstOrDefault<User>(query, new { userName, password });
+
+                return user;
+            }
+
         }
     }
 }

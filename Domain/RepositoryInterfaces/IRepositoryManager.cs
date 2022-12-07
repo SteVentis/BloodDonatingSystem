@@ -16,6 +16,6 @@ namespace Domain.RepositoryInterfaces
 
         IBloodDonorRepository BloodDonors { get; }
 
-        IUserRepository Users { get; }
+        IAuthRepository AuthUsers { get; }
     }
 }

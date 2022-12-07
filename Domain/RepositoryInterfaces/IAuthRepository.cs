@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Domain.RepositoryInterfaces
 {
-    public interface IUserRepository
+    public interface IAuthRepository
     {
         void Register(User user);
+
+        User Login(string userName, string password);
     }
 }

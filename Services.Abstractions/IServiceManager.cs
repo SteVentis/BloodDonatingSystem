@@ -17,6 +17,6 @@ namespace Services.Abstractions
 
         IBloodDonationCenterService BloodDonationCenters { get; }
 
-        IUserService Users { get; }
+        IAuthService AuthUsers { get; }
     }
 }

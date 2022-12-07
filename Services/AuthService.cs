@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Models.IdentityModels;
+﻿using Contracts.Identitydtos;
+using Domain.Entities.Models.IdentityModels;
 using Domain.RepositoryInterfaces;
 using Services.Abstractions.ServiceInterfaces;
 using Services.Helpers;
@@ -11,13 +12,27 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    internal sealed class UserService : IUserService
+    internal sealed class AuthService : IAuthService
     {
         private readonly IRepositoryManager _repositoryManager;
 
-        public UserService(IRepositoryManager repositoryManager)
+        public AuthService(IRepositoryManager repositoryManager)
         {
             _repositoryManager = repositoryManager;
+        }
+
+        public User Login(LoginModelDto dto)
+        {
+
+            
+            var newRefreshToken = TokenGenerator.GenerateRefreshToken();
+            string salt = SecurityHelper.GenerateSalt(70);
+            string pwdHash = SecurityHelper.HashPassword(dto.PasswordHash, salt, 10101, 70);
+            dto.PasswordHash = pwdHash;
+            var user = _repositoryManager.AuthUsers.Login(dto.UserName, dto.PasswordHash);
+
+            return user;
+            
         }
 
         public void Register(User user)
@@ -26,8 +41,8 @@ namespace Services
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.UserName)
-                //new Claim(ClaimTypes.Role, user.Role.Name)
             };
+
             var accessToken = TokenGenerator.GenerateAccessToken(claims);
             user.Token = accessToken;
             var refreshToken = TokenGenerator.GenerateRefreshToken();
@@ -36,7 +51,7 @@ namespace Services
             string pwdHash = SecurityHelper.HashPassword(user.PasswordHash, salt, 10101, 70);
             user.PasswordHash = pwdHash;
 
-            _repositoryManager.Users.Register(user);
+            _repositoryManager.AuthUsers.Register(user);
 
         }
     }

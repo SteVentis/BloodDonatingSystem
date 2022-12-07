@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Models.IdentityModels;
+﻿using Contracts.Identitydtos;
+using Domain.Entities.Models.IdentityModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
@@ -25,11 +26,22 @@ namespace Presentation.Controllers
 
 
         [HttpPost]
+        [Route("Register")]
         public IActionResult Register(User user)
         {
-            _serviceManager.Users.Register(user);
+            _serviceManager.AuthUsers.Register(user);
 
             return Ok();
+        }
+
+        [HttpPost]
+        [Route("Login")]
+        public IActionResult Login(LoginModelDto dto)
+        {
+           var user =  _serviceManager.AuthUsers.Login(dto);
+
+
+            return Ok(new { user.Token, user.RefreshToken });
         }
 
         

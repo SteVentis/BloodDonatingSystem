@@ -21,7 +21,7 @@ namespace Persistence.Repositories
         public IBloodDonorRepository BloodDonors { get; }
         public ILoggerManager Logger { get; }
 
-        public IUserRepository Users { get; }
+        public IAuthRepository AuthUsers { get; }
 
         public RepositoryManager(DapperContext dbContext,ILoggerManager logger)
         {
@@ -30,7 +30,7 @@ namespace Persistence.Repositories
             Patients = new PatientRepository(dbContext,logger);
             BloodDonationCenters = new BloodDonationCenterRepository(dbContext,logger);
             BloodDonors = new BloodDonorRepository(dbContext, logger);
-            Users = new UserRepository(dbContext, logger);
+            AuthUsers = new AuthRepository(dbContext, logger);
         }
     }
 }
