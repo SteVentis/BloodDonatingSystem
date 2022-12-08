@@ -39,13 +39,17 @@ namespace Presentation.Controllers
         public IActionResult Login(LoginModelDto dto)
         {
             var user =  _serviceManager.AuthUsers.Login(dto);
-            
+            if(user is null)
+            {
+                return Unauthorized();
+            }
+
             if(!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
             {
                 return BadRequest("Your Email,Username or Password is not valid");
             }
 
-
+            
 
             return Ok(new { user.Token, user.RefreshToken });
         }

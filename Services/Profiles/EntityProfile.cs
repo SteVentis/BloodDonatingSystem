@@ -24,6 +24,8 @@ namespace Services.Profiles
             CreateMap<BloodDonationCenter, BloodDonationCenterReadDto>();
             CreateMap<BloodDonor, BloodDonorReadDto>();
             CreateMap<RegistrationModelDto, User>();
+            CreateMap<User, UserReadDto>();
+
         }
     }
 }

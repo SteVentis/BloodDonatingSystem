@@ -24,30 +24,37 @@ namespace Services
             _mapper = mapper;
         }
 
-        public User Login(LoginModelDto dto)
+        public UserReadDto Login(LoginModelDto dto)
         {
 
             var user = _repositoryManager.AuthUsers.AuthenticateUserWithUserNameOrEmail(dto.UserName);
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Email, user.Email)
+                
+            };
 
-            return user;
+            var accessToken = TokenGenerator.GenerateAccessToken(claims);
+            user.Token = accessToken;
+            var refreshToken = TokenGenerator.GenerateRefreshToken();
+            user.RefreshToken = refreshToken;
+            string pwdHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+            user.PasswordHash = pwdHash;
+            user.RefreshTokensExpires = DateTime.Now.AddDays(7);
+
+            _repositoryManager.AuthUsers.UpdateUsersTokens(user);
+
+            var mappedUser = _mapper.Map<UserReadDto>(user);
+
+            return mappedUser;
             
         }
 
         public void Register(RegistrationModelDto dto)
         {
             
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Name, dto.UserName)
-            };
-
-            var accessToken = TokenGenerator.GenerateAccessToken(claims);
-            dto.Token = accessToken;
-            var refreshToken = TokenGenerator.GenerateRefreshToken();
-            dto.RefreshToken = refreshToken;
-            string pwdHash = BCrypt.Net.BCrypt.HashPassword(dto.PasswordHash);
-            dto.PasswordHash = pwdHash;
-            dto.RefreshTokensExpires = DateTime.Now.AddDays(7);
+            
             var user = _mapper.Map<User>(dto);
 
             _repositoryManager.AuthUsers.Register(user);

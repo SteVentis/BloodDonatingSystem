@@ -11,6 +11,6 @@ namespace Services.Abstractions.ServiceInterfaces
     public interface IAuthService
     {
         void Register(RegistrationModelDto dto);
-        User Login(LoginModelDto dto);
+        UserReadDto Login(LoginModelDto dto);
     }
 }
