@@ -27,9 +27,9 @@ namespace Presentation.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public IActionResult Register(User user)
+        public IActionResult Register(RegistrationModelDto dto)
         {
-            _serviceManager.AuthUsers.Register(user);
+            _serviceManager.AuthUsers.Register(dto);
 
             return Ok();
         }
@@ -38,7 +38,13 @@ namespace Presentation.Controllers
         [Route("Login")]
         public IActionResult Login(LoginModelDto dto)
         {
-           var user =  _serviceManager.AuthUsers.Login(dto);
+            var user =  _serviceManager.AuthUsers.Login(dto);
+            
+            if(!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            {
+                return BadRequest("Your Email,Username or Password is not valid");
+            }
+
 
 
             return Ok(new { user.Token, user.RefreshToken });

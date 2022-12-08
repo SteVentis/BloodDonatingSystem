@@ -10,7 +10,6 @@ namespace Domain.RepositoryInterfaces
     public interface IAuthRepository
     {
         void Register(User user);
-
-        User Login(string userName, string password);
+        User AuthenticateUserWithUserNameOrEmail(string userName);
     }
 }

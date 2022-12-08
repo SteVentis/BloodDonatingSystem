@@ -2,8 +2,10 @@
 using Contracts.BloodDonationCenterDtos;
 using Contracts.BloodDonorDtos;
 using Contracts.HospitalDtos;
+using Contracts.Identitydtos;
 using Contracts.PatientDtos;
 using Domain.Entities.Models;
+using Domain.Entities.Models.IdentityModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +23,7 @@ namespace Services.Profiles
             CreateMap<PatientCreateDto, Patient>();
             CreateMap<BloodDonationCenter, BloodDonationCenterReadDto>();
             CreateMap<BloodDonor, BloodDonorReadDto>();
+            CreateMap<RegistrationModelDto, User>();
         }
     }
 }

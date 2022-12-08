@@ -1,4 +1,5 @@
-﻿using Contracts.Identitydtos;
+﻿using AutoMapper;
+using Contracts.Identitydtos;
 using Domain.Entities.Models.IdentityModels;
 using Domain.RepositoryInterfaces;
 using Services.Abstractions.ServiceInterfaces;
@@ -15,41 +16,39 @@ namespace Services
     internal sealed class AuthService : IAuthService
     {
         private readonly IRepositoryManager _repositoryManager;
+        private readonly IMapper _mapper;
 
-        public AuthService(IRepositoryManager repositoryManager)
+        public AuthService(IRepositoryManager repositoryManager, IMapper mapper)
         {
             _repositoryManager = repositoryManager;
+            _mapper = mapper;
         }
 
         public User Login(LoginModelDto dto)
         {
 
-            
-            var newRefreshToken = TokenGenerator.GenerateRefreshToken();
-            string salt = SecurityHelper.GenerateSalt(70);
-            string pwdHash = SecurityHelper.HashPassword(dto.PasswordHash, salt, 10101, 70);
-            dto.PasswordHash = pwdHash;
-            var user = _repositoryManager.AuthUsers.Login(dto.UserName, dto.PasswordHash);
+            var user = _repositoryManager.AuthUsers.AuthenticateUserWithUserNameOrEmail(dto.UserName);
 
             return user;
             
         }
 
-        public void Register(User user)
+        public void Register(RegistrationModelDto dto)
         {
             
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(ClaimTypes.Name, dto.UserName)
             };
 
             var accessToken = TokenGenerator.GenerateAccessToken(claims);
-            user.Token = accessToken;
+            dto.Token = accessToken;
             var refreshToken = TokenGenerator.GenerateRefreshToken();
-            user.RefreshToken = refreshToken;
-            string salt = SecurityHelper.GenerateSalt(70);
-            string pwdHash = SecurityHelper.HashPassword(user.PasswordHash, salt, 10101, 70);
-            user.PasswordHash = pwdHash;
+            dto.RefreshToken = refreshToken;
+            string pwdHash = BCrypt.Net.BCrypt.HashPassword(dto.PasswordHash);
+            dto.PasswordHash = pwdHash;
+            dto.RefreshTokensExpires = DateTime.Now.AddDays(7);
+            var user = _mapper.Map<User>(dto);
 
             _repositoryManager.AuthUsers.Register(user);
 

@@ -27,7 +27,7 @@ namespace Services
             Patients = new PatientService(repositoryManager, mapper);
             BloodDonationCenters = new BloodDonationCenterService(repositoryManager, mapper);
             BloodDonors = new BloodDonorService(repositoryManager, mapper);
-            AuthUsers = new AuthService(repositoryManager);
+            AuthUsers = new AuthService(repositoryManager, mapper);
         }
 
         

@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities.Models.IdentityModels
+namespace Contracts.Identitydtos
 {
-    public class User
+    public class RegistrationModelDto
     {
-        public Guid Id { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }
@@ -16,7 +15,5 @@ namespace Domain.Entities.Models.IdentityModels
         public string RefreshToken { get; set; }
         public DateTime RefreshTokensExpires { get; set; }
         public int Role_Id { get; set; }
-        public Role Role { get; set; }
-
     }
 }

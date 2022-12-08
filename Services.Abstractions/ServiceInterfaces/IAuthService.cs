@@ -10,7 +10,7 @@ namespace Services.Abstractions.ServiceInterfaces
 {
     public interface IAuthService
     {
-        void Register(User User);
+        void Register(RegistrationModelDto dto);
         User Login(LoginModelDto dto);
     }
 }

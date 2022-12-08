@@ -24,16 +24,19 @@ namespace Persistence.Repositories
 
         public void Register(User user)
         {
-            var query = $"INSERT INTO Users(Id, UserName, Email, PasswordHash, Token, RefreshToken, Role_Id)" +
-                $"VALUES(@Id, @UserName, @Email, @PasswordHash, @Token, @RefreshToken, @Role_Id)";
+            var query = $"INSERT INTO Users(Id, UserName, Email, PasswordHash, Token, RefreshToken,RefreshTokenExpires, Role_Id)" +
+                $"VALUES(@Id, @UserName, @Email, @PasswordHash, @Token, @RefreshToken, @RefreshTokenExpires, @Role_Id)";
+
+            user.Id = Guid.NewGuid();
 
             var parameters = new DynamicParameters();
             parameters.Add("Id", user.Id, DbType.Guid);
-            parameters.Add("Username", user.Email, DbType.String);
+            parameters.Add("UserName", user.Email, DbType.String);
             parameters.Add("Email", user.Email, DbType.String);
             parameters.Add("PasswordHash", user.PasswordHash, DbType.String);
             parameters.Add("Token", user.Token, DbType.String);
             parameters.Add("RefreshToken", user.RefreshToken, DbType.String);
+            parameters.Add("RefreshTokenExpires", user.RefreshTokensExpires, DbType.DateTime);
             parameters.Add("Role_Id", user.Role_Id, DbType.Int32);
 
             using(var connection = _dbContext.CreateConnection())
@@ -41,17 +44,26 @@ namespace Persistence.Repositories
                 var userRegistration = connection.Execute(query, parameters);
             }
         }
-        public User Login(string userName,string password)
+
+        public User AuthenticateUserWithUserNameOrEmail(string userName)
         {
-            var query = $"SELECT * FROM Users WHERE UserName=@userName AND PasswordHash=@password";
+            var query = "SELECT * FROM Users WHERE UserName=@userName OR Email=@userName";
+
+            var param = new { Username = userName };
 
             using(var connection = _dbContext.CreateConnection())
             {
-                var user = connection.QueryFirstOrDefault<User>(query, new { userName, password });
-
+                var user = connection.QuerySingle<User>(query,param);
+                
                 return user;
             }
+        }
+
+        public void UpdateUser(User user)
+        {
 
         }
+
+        
     }
 }
