@@ -39,6 +39,13 @@ namespace Services
             return hospitalDto;
         }
 
+        public void InsertHospital(HospitalCreateDto hospitalCreateDto)
+        {
+            var hospital = _mapper.Map<Hospital>(hospitalCreateDto);
+
+            _repositoryManager.Hospitals.InsertHospital(hospital);
+
+        }
        
     }
 }

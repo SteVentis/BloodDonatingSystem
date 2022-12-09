@@ -14,7 +14,7 @@ namespace Services.Helpers
     {
         public static string GenerateAccessToken(IEnumerable<Claim> claims)
         {
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superdupersecretkey@365"));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GenerateStringForSecurityKey(20)));
             var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
             var tokenOptions = new JwtSecurityToken(
                 issuer: "https://localhost:44324/",
@@ -38,6 +38,40 @@ namespace Services.Helpers
 
                 return Convert.ToBase64String(random);
             }
+        }
+
+        public static string GenerateStringForSecurityKey(int length)
+        {
+            Random random = new Random();
+
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        public ClaimsPrincipal GetPrincipalForExpiredToken(string token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GenerateStringForSecurityKey(20))),
+                ValidateLifetime = false
+            };
+
+            var tokenHadler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            var principal = tokenHadler.ValidateToken(token, tokenValidationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+
+            if(jwtSecurityToken is null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.CurrentCultureIgnoreCase))
+            {
+                throw new SecurityTokenException("Invalid Token");
+            }
+
+            return principal;
+
         }
     }
 }

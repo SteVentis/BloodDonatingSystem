@@ -24,8 +24,8 @@ namespace Persistence.Repositories
 
         public void Register(User user)
         {
-            var query = $"INSERT INTO Users(Id, UserName, Email, PasswordHash,  Role_Id)" +
-                $"VALUES(@Id, @UserName, @Email, @PasswordHash,  @Role_Id)";
+            var query = $"INSERT INTO Users(Id, UserName, Email, PasswordHash, RefreshToken, RefreshTokenExpires, Role_Id)" +
+                $"VALUES(@Id, @UserName, @Email, @PasswordHash, @RefreshToken, @RefreshTokenExpires,  @Role_Id)";
 
             user.Id = Guid.NewGuid();
 
@@ -34,6 +34,8 @@ namespace Persistence.Repositories
             parameters.Add("UserName", user.Email, DbType.String);
             parameters.Add("Email", user.Email, DbType.String);
             parameters.Add("PasswordHash", user.PasswordHash, DbType.String);
+            parameters.Add("RefreshToken", user.RefreshToken, DbType.String);
+            parameters.Add("RefreshTokenExpires", user.RefreshTokensExpires, DbType.DateTime);
             parameters.Add("Role_Id", user.Role_Id, DbType.Int32);
 
             using(var connection = _dbContext.CreateConnection())
@@ -56,15 +58,14 @@ namespace Persistence.Repositories
             }
         }
 
-        public void UpdateUsersTokens(User user)
+        public void UpdateUsersJWTToken(User user)
         {
-            var query = "UPDATE Users SET Token = @Token, RefreshToken = @RefreshToken, RefreshTokenExpires = @RefreshTokenExpires WHERE Id=@Id";
+            var query = "UPDATE Users SET Token = @Token WHERE Id=@Id";
 
             var parameters = new DynamicParameters();
             parameters.Add("Id", user.Id, DbType.Guid);
             parameters.Add("Token", user.Token, DbType.String);
-            parameters.Add("RefreshToken", user.RefreshToken, DbType.String);
-            parameters.Add("RefreshTokenExpires", user.RefreshTokensExpires, DbType.DateTime);
+            
 
             using(var connection = _dbContext.CreateConnection())
             {
@@ -72,6 +73,9 @@ namespace Persistence.Repositories
             }
         }
 
-        
+        public void UpdateRefreshToken(User user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

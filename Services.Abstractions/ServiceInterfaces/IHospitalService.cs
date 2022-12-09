@@ -12,5 +12,7 @@ namespace Services.Abstractions.ServiceInterfaces
         IEnumerable<HospitalReadDto> GetAllHospitals();
 
         HospitalReadDto GetHospitalById(int id);
+
+        void InsertHospital(HospitalCreateDto hospitalCreateDto);
     }
 }

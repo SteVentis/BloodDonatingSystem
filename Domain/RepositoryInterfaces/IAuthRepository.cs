@@ -11,6 +11,8 @@ namespace Domain.RepositoryInterfaces
     {
         void Register(User user);
         User AuthenticateUserWithUserNameOrEmail(string userName);
-        void UpdateUsersTokens(User user);
+        void UpdateUsersJWTToken(User user);
+        void UpdateRefreshToken(User user);
+
     }
 }

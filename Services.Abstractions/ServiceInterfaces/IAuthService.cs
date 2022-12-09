@@ -1,4 +1,4 @@
-﻿using Contracts.Identitydtos;
+﻿using Contracts.IdentityDtos;
 using Domain.Entities.Models.IdentityModels;
 using System;
 using System.Collections.Generic;

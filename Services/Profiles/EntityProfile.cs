@@ -2,7 +2,7 @@
 using Contracts.BloodDonationCenterDtos;
 using Contracts.BloodDonorDtos;
 using Contracts.HospitalDtos;
-using Contracts.Identitydtos;
+using Contracts.IdentityDtos;
 using Contracts.PatientDtos;
 using Domain.Entities.Models;
 using Domain.Entities.Models.IdentityModels;
@@ -19,12 +19,14 @@ namespace Services.Profiles
         public Entity_Profile()
         {
             CreateMap<Hospital, HospitalReadDto>();
+            CreateMap<HospitalCreateDto, Hospital>();
             CreateMap<Patient, PatientReadDto>();
             CreateMap<PatientCreateDto, Patient>();
             CreateMap<BloodDonationCenter, BloodDonationCenterReadDto>();
             CreateMap<BloodDonor, BloodDonorReadDto>();
             CreateMap<RegistrationModelDto, User>();
             CreateMap<User, UserReadDto>();
+
 
         }
     }

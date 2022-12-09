@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Contracts.Identitydtos;
+using Contracts.IdentityDtos;
 using Domain.Entities.Models.IdentityModels;
 using Domain.RepositoryInterfaces;
 using Services.Abstractions.ServiceInterfaces;
@@ -37,13 +37,8 @@ namespace Services
 
             var accessToken = TokenGenerator.GenerateAccessToken(claims);
             user.Token = accessToken;
-            var refreshToken = TokenGenerator.GenerateRefreshToken();
-            user.RefreshToken = refreshToken;
-            string pwdHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
-            user.PasswordHash = pwdHash;
-            user.RefreshTokensExpires = DateTime.Now.AddDays(7);
-
-            _repositoryManager.AuthUsers.UpdateUsersTokens(user);
+                        
+            _repositoryManager.AuthUsers.UpdateUsersJWTToken(user);
 
             var mappedUser = _mapper.Map<UserReadDto>(user);
 
@@ -54,8 +49,13 @@ namespace Services
         public void Register(RegistrationModelDto dto)
         {
             
+            string pwdHash = BCrypt.Net.BCrypt.HashPassword(dto.PasswordHash);
+            dto.PasswordHash = pwdHash;
             
             var user = _mapper.Map<User>(dto);
+            var refreshToken = TokenGenerator.GenerateRefreshToken();
+            user.RefreshToken = refreshToken;
+            user.RefreshTokensExpires = DateTime.Now.AddDays(7);
 
             _repositoryManager.AuthUsers.Register(user);
 

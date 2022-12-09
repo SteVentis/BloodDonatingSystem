@@ -20,6 +20,7 @@ using Persistence.Repositories;
 using Presentation;
 using Services;
 using Services.Abstractions;
+using Services.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -62,21 +63,19 @@ namespace WebApp
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            var secretKey = Configuration["JWT:Secret"];
+            var secretKey = TokenGenerator.GenerateStringForSecurityKey(20);
 
             var tokenValidationParameters = new TokenValidationParameters()
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
-
                 ValidateIssuer = true,
-                ValidIssuer = secretKey,
-
+                ValidIssuer = "https://localhost:44324/",
                 ValidateAudience = true,
-                ValidAudience = secretKey,
-
+                ValidAudience = "https://localhost:44324/",               
                 ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
+
+                
             };
 
             services.AddSingleton(tokenValidationParameters);
@@ -85,12 +84,9 @@ namespace WebApp
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 
             }).AddJwtBearer(options =>
             {
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = tokenValidationParameters;
             });
 

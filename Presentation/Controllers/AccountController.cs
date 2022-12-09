@@ -1,4 +1,4 @@
-﻿using Contracts.Identitydtos;
+﻿using Contracts.IdentityDtos;
 using Domain.Entities.Models.IdentityModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

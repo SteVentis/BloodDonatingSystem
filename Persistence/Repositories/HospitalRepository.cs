@@ -5,6 +5,7 @@ using Domain.RepositoryInterfaces;
 using Persistence.Context;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,6 +50,23 @@ namespace Persistence.Repositories
 
                 return hospital;
             }
+        }
+
+        public void InsertHospital(Hospital hospital)
+        {
+            string query = "INSERT INTO Hospital VALUES(@Id, @Name, @Address, @Phone, @IsBloodDonationCenter)";
+            var queryParameters = new DynamicParameters();
+            queryParameters.Add("Id", hospital.Id, DbType.Int32);
+            queryParameters.Add("Name", hospital.Name, DbType.String);
+            queryParameters.Add("Address", hospital.Address, DbType.String);
+            queryParameters.Add("Phone", hospital.Phone, DbType.String);
+            queryParameters.Add("IsBloodDonationCenter", hospital.IsBloodDonationCenter, DbType.Boolean);
+
+            using (var connection = _dbContext.CreateConnection())
+            {
+                connection.Execute(query, queryParameters);
+            }
+
         }
     }
 }

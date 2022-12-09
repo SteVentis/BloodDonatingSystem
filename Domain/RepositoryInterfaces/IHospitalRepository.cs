@@ -11,5 +11,7 @@ namespace Domain.RepositoryInterfaces
     {
         IEnumerable<Hospital> GetAllHospitals();
         Hospital GetHospitalById(int id);
+        void InsertHospital(Hospital hospital);
+
     }
 }
